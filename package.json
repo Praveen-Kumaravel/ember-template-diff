@@ -1,0 +1,18 @@
+{
+  "name": "ember-template-diff",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "Praveen-Kumaravel",
+  "license": "ISC",
+  "dependencies": {
+    "ember-template-recast": "^6.1.4",
+    "treediffer": "^1.1.1"
+  },
+  "devDependencies": {
+    "eslint": "^8.44.0"
+  }
+}
