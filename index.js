@@ -9,6 +9,10 @@ async function readFileAsString(path) {
 
 class ASTNode extends treeDiffer.TreeNode {
     isEqual(otherNode) {
+        /*
+        * TODO: Update this method to return true for ignorable diffs like html tags, but false for different components
+        * Can be parameterised to support multipe variants of diffing.
+        */
         return this.node.type === otherNode.node.type;
     }
 
@@ -38,7 +42,7 @@ async function run() {
     let i, ilen;
     for ( i = 0, ilen = diff.length; i < ilen; i++ ) {
 		if ( diff[ i ][ 0 ] !== null && diff[ i ][ 1 ] !== null ) {
-			console.log( 'change', tree1.orderedNodes[ diff[ i ][ 0 ] ].type );
+			console.log( 'change', tree1.orderedNodes[ diff[ i ][ 0 ] ].node.type );
 			console.log('change' , tree2.orderedNodes[ diff[ i ][ 1 ] ].node.type );
 		} else if ( diff[ i ][ 0 ] ) {
 			console.log('remove' , tree1.orderedNodes[ diff[ i ][ 0 ] ].node.type );
