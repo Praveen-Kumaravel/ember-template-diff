@@ -30,11 +30,22 @@ async function run() {
     
     const tree1 = new treeDiffer.Tree(recast.parse(template1), treeDiffer.ASTNode);
     const tree2 = new treeDiffer.Tree(recast.parse(template2), treeDiffer.ASTNode);
-    
+
     const diff = new treeDiffer.Differ(tree1, tree2)
         .transactions[ tree1.orderedNodes.length - 1 ][ tree2.orderedNodes.length - 1 ];
     
     console.log(diff);
+    let i, ilen;
+    for ( i = 0, ilen = diff.length; i < ilen; i++ ) {
+		if ( diff[ i ][ 0 ] !== null && diff[ i ][ 1 ] !== null ) {
+			console.log( 'change', tree1.orderedNodes[ diff[ i ][ 0 ] ].type );
+			console.log('change' , tree2.orderedNodes[ diff[ i ][ 1 ] ].node.type );
+		} else if ( diff[ i ][ 0 ] ) {
+			console.log('remove' , tree1.orderedNodes[ diff[ i ][ 0 ] ].node.type );
+		} else if ( diff[ i ][ 1 ] ) {
+			console.log('insert' , tree2.orderedNodes[ diff[ i ][ 1 ] ].node.type );
+		}
+	}
 }
 
 run();
