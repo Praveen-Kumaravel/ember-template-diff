@@ -42,12 +42,22 @@ async function run() {
 
     const diff = new treeDiffer.Differ(tree1, tree2)
         .transactions[ tree1.orderedNodes.length - 1 ][ tree2.orderedNodes.length - 1 ];
-    
-    console.log(diff);
 
-    let filteredTransactions = [];
+    const filteredTransactions = [];
+    const counts = {
+        inserts: 0,
+        deletes: 0,
+        updates: 0
+    };
+
+    const COUNT_TYPE_MAP = {
+        '+': 'inserts',
+        '-': 'deletes',
+        '->': 'updates'
+    }
 
     function processTransaction(type, nodeA, nodeB) {
+        counts[COUNT_TYPE_MAP[type]]++;
         if (!nodeB) {
             if (NODE_TYPES_TO_CONSIDER.includes(nodeA.type)) {
                 filteredTransactions.push(`${type} ${printAstNode(nodeA)}`);
@@ -71,7 +81,22 @@ async function run() {
 		}
 	}
 
-    console.log(filteredTransactions);
+
+    const insights = [];
+    function buildInsights() {
+        if (!counts.deletes && !counts.updates) {
+            insights.push(`${samples[0]} is a subset of ${samples[1]} and can be reused`);
+        }
+    }
+    
+    buildInsights();
+    console.log('Summary: ', counts);
+    console.log('\nInsights:');
+    console.log(insights.map((str, idx) => `${idx + 1}: ${str}`).join('\n'));
+
+    
+    const SHOULD_PRINT_DIFF = false;
+    SHOULD_PRINT_DIFF &&  console.log('Diffs: ', filteredTransactions);
 }
 
 run();

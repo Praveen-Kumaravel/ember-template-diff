@@ -1,7 +1,7 @@
 {{status-notifier onClick=(action 'adjustLeftNavBar')}}
 
 {{ui/progress-bar isLoading=isLoading}}
-<h1>YO</h1>
+
 <div class="notification-wrap">
   {{#each flashMessages.queuedItems as |flash|}}
     {{flash-message class="notification-messages" flash=flash}}
