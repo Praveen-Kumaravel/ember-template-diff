@@ -2,7 +2,8 @@ const recast = require('ember-template-recast');
 const treeDiffer = require('treediffer');
 const {print: printAstNode} = require('@glimmer/syntax');
 const visitorKeys = require('./visitorKeys');
-const { readFile } = require('fs/promises')
+const { readFile } = require('fs/promises');
+const compare = require('./compareNodes');
 
 async function readFileAsString(path) {  
   return await readFile(path, 'utf8')
@@ -13,12 +14,12 @@ const NODE_TYPES_TO_CONSIDER = ['Template', 'Block', 'MustacheStatement',
     'NamedBlock', 'SimpleElement', 'Component'];
 
 class ASTNode extends treeDiffer.TreeNode {
-    isEqual(otherNode) {
+    isEqual(other) {
         /*
-        * TODO: Update this method to return true for ignorable diffs like html tags, but false for different components
+        * TODO: Update this method to return false for different components
         * Can be parameterised to support multipe variants of diffing.
         */
-        return this.node.type === otherNode.node.type;
+        return compare(this.node, other.node);
     }
 
     getOriginalNodeChildren() {
@@ -91,8 +92,10 @@ async function run() {
     
     buildInsights();
     console.log('Summary: ', counts);
-    console.log('\nInsights:');
-    console.log(insights.map((str, idx) => `${idx + 1}: ${str}`).join('\n'));
+    if (insights.length) {
+        console.log('\nInsights:');
+        console.log(insights.map((str, idx) => `${idx + 1}: ${str}`).join('\n'));
+    }
 
     
     const SHOULD_PRINT_DIFF = false;
