@@ -9,7 +9,7 @@ async function readFileAsString(path) {
 
 class ASTNode extends treeDiffer.TreeNode {
     isEqual(otherNode) {
-        this.node.type === otherNode.type;
+        return this.node.type === otherNode.node.type;
     }
 
     getOriginalNodeChildren() {
