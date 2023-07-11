@@ -34,7 +34,7 @@ class ASTNode extends treeDiffer.TreeNode {
 treeDiffer.ASTNode = ASTNode;
 
 async function run() {    
-    const samples = ['./samples/template-a.hbs', './samples/template-b.hbs']
+    const samples = ['./samples/owner-info.hbs', './samples/entity-name-cell-account.hbs']
     
     const [template1, template2] = await Promise.all(samples.map(readFileAsString));
     

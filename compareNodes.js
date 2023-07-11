@@ -1,6 +1,7 @@
 const COMPARISON_KEYS = {
     'MustacheStatement': 'path.original',
-    'BlockStatement': 'path.original'
+    'BlockStatement': 'path.original',
+    'ElementNode': 'tag'
 }
 
 function getValueByKey(obj, key) {

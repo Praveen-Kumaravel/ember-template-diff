@@ -1,0 +1,57 @@
+<div class="mini-card flex flex--item-center">
+  {{#if record.isDeleted}}
+    <div class="mini-card-avatar">
+      {{custom-avatar size=customAvatarSize model=record isHoverCardShown=false}}
+    </div>
+    <div class="mini-card-content">
+      <span class="h5" data-test-display-name>
+        {{record.name}}
+      </span>
+    </div>
+  {{else}}
+    <div class="mini-card-avatar">
+      {{custom-avatar size=customAvatarSize model=record isHoverCardShown=true reloadCurrentRoute=(action send "reloadCurrentRoute") showEditAllFields=true}}
+    </div>
+    <div class="mini-card-content">
+      {{#if allowInlineEdit}}
+        {{#entity-card-detail/bulk-inline-edit model=record fieldClass='sales_account' notify=(action 'notify') reloadCurrentRoute=(action reloadCurrentRoute) as |bulkInlineEdit|}}
+          {{#bulkInlineEdit.content}}
+            <span class="h5">
+              {{link-to record.name 'modules.accounts.show' record.id class="strong text-ellipsis" title=record.name data-test-account-name-link=record.name}}
+            </span>
+            {{#unless isCompactView}}
+              <p class="text-ellipsis" data-test-region>{{record.region}}</p>
+              {{#if hasInfo}}
+  {{svg-jar "icon-owner" class="svg-md"}}
+  <span class="owner-name text-ellipsis" data-test-ownerInfo>
+    {{owner.displayName}}
+  </span>
+{{/if}}
+            {{/unless}}
+          {{/bulkInlineEdit.content}}
+          {{#if shouldRenderEditor}}
+            {{#bulkInlineEdit.editor}}
+              {{#each primaryAccountFields as |field|}}
+                {{custom-forms/dynamic-editable-field
+                  class="mg-b-15"
+                  field=field
+                  model=(custom-forms/field-model-object field=field model=record)
+                  stateName=stateName
+                  isDependencyEnabled=true
+                  renderInPlace=true}}
+              {{/each}}  
+            {{/bulkInlineEdit.editor}}
+          {{/if}}  
+        {{/entity-card-detail/bulk-inline-edit}}
+      {{else}}
+        <span class="h5" data-test-displayname>
+          {{link-to record.name "modules.accounts.show" record.id class="strong text-ellipsis" title=record.name data-test-account-name-link=record.name}}
+        </span>
+        {{#unless isCompactView}}
+          <p class="text-ellipsis" data-test-region>{{record.region}}</p>
+          {{owner-info owner=record.owner}}
+        {{/unless}}
+      {{/if}}
+    </div>
+  {{/if}}
+</div>
